@@ -2,7 +2,8 @@
 
 This repository is a **monorepo** using **Turborepo** that integrates **Express.js** (backend) and **Next.js** (frontend), with Firebase features including **Authentication, Firestore, Cloud Functions, and Emulator Suite**. The UI implementation is minimal, focusing on backend functionality.
 
-📹 [Watch Demo Video](https://github.com/ryusuf11/firebase-app/releases/download/demo/firebase.app.demo.mov)
+[![Demo](https://cdn.loom.com/sessions/thumbnails/5cb5e687aba54671a874ed76be60be2b-5c57df91e54fd5f9-full-play.gif)](https://www.loom.com/share/5cb5e687aba54671a874ed76be60be2b?sid=2af2929d-b359-4d43-b193-e8b4d26ebedb)
+
 
 ## 🛠 Tech Stack
 
