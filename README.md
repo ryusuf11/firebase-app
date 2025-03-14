@@ -1,84 +1,143 @@
-# Turborepo starter
+# Turborepo with Firebase (Express.js & Next.js)
 
-This Turborepo starter is maintained by the Turborepo core team.
+This repository is a **monorepo** using **Turborepo** that integrates **Express.js** (backend) and **Next.js** (frontend), with Firebase features including **Authentication, Firestore, Cloud Functions, and Emulator Suite**. The UI implementation is minimal, focusing on backend functionality.
 
-## Using this example
+## 🛠 Tech Stack
 
-Run the following command:
+- **Monorepo Management:** Turborepo
+- **Backend:** Express.js, Firebase Functions, Firestore
+- **Frontend:** Next.js 15, React MUI, Redux
+- **State Management:** Redux
+- **Authentication:** Firebase Auth
+- **Database:** Firestore
+- **Infrastructure:** Firebase Cloud Functions, Firebase Emulator Suite
+- **Package Manager:** pnpm
+- **Programming Language:** TypeScript
+
+## 📂 Project Structure
+
+```
+/turborepo-root
+│── apps/
+│   ├── backend-repo/  # Express.js + Firebase Functions (API)
+│   ├── frontend-repo/  # Next.js 15 (React MUI + Redux)
+│── packages/  # Shared utilities
+│── .gitignore
+│── .eslintrc.js
+│── package.json
+│── turbo.json
+```
+
+## 🚀 Getting Started
+
+### 1️⃣ Install Dependencies
+
+Make sure you have **pnpm** installed globally:
 
 ```sh
-npx create-turbo@latest
+npm install -g pnpm
 ```
 
-## What's inside?
+Then install dependencies:
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```sh
+pnpm install
 ```
 
-### Develop
+### 2️⃣ Setup Environment Variables
 
-To develop all apps and packages, run the following command:
+#### Frontend (`apps/frontend-repo/.env.local`)
 
+Create an `.env.local` file inside `apps/frontend-repo/` with:
+
+```sh
+NEXT_PUBLIC_FIREBASE_API_KEY=<your-api-key>
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<your-auth-domain>
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=<your-project-id>
+NEXT_PUBLIC_FIREBASE_APP_ID=<your-app-id>
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=<your-storage-bucket>
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=<your-messaging-sender-id>
+NEXT_PUBLIC_API_BASE_URL=http://localhost:5001/user-store-b5103/us-central1
 ```
-cd my-turborepo
+
+#### Backend (`apps/backend-repo/serviceAccountKey.json`)
+
+Create a `serviceAccountKey.json` file inside `apps/backend-repo/` with your Firebase service account credentials:
+
+```json
+{
+  "type": "service_account",
+  "project_id": "<your-project-id>",
+  "private_key_id": "<your-private-key-id>",
+  "private_key": "<your-private-key>\n",
+  "client_email": "<your-client-email>",
+  "client_id": "<your-client-id>",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/<your-client-email>"
+}
+```
+
+### 3️⃣ Run Firebase Emulator Locally
+
+Firebase Emulator allows testing Firestore and Functions without deploying.
+
+```sh
+cd apps/backend-repo
+firebase emulators:start --only functions,firestore,auth
+```
+
+### 4️⃣ Start Backend (Express.js + Firebase Functions)
+
+```sh
+cd apps/backend-repo
+pnpm build && firebase emulators:start --only functions
+```
+
+### 5️⃣ Start Frontend (Next.js 14+)
+
+```sh
+cd apps/frontend-repo
 pnpm dev
 ```
 
-### Remote Caching
+## 🔥 Deploying to Firebase
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Ensure your Firebase project is on the **Blaze Plan** to enable Cloud Functions.
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```sh
+cd apps/backend-repo
+firebase deploy --only functions
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+For frontend deployment:
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
+```sh
+cd apps/frontend-repo
+firebase target:apply hosting frontend <your-project-id>
+firebase deploy --only hosting
 ```
-npx turbo link
-```
 
-## Useful Links
+---
 
-Learn more about the power of Turborepo:
+### 🎯 Features
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+✔ **Firebase Authentication** (Google Sign-In, Email/Password, etc.)\
+✔ **Firestore Integration** (Realtime Database)\
+✔ **Firebase Cloud Functions** (Backend API)\
+✔ **Redux for State Management**\
+✔ **React MUI for UI Components**\
+✔ **Next.js App Router for Navigation**\
+✔ **Turborepo for Monorepo Management**\
+✔ **Firebase Emulator Suite for Local Development**
+
+---
+
+## 📌 Notes
+
+- Firebase **Emulator Suite** allows API testing locally without affecting production.
+- **Firestore security rules** should be configured before deploying.
+- Ensure `.gitignore` includes `serviceAccountKey.json` for security.
+
+💡 **Need improvements or have questions? Feel free to contribute!** 🚀
