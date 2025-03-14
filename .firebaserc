@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "user-store-b5103"
+  },
+  "targets": {
+    "user-store-b5103": {
+      "hosting": {
+        "frontend": [
+          "user-store-b5103"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
